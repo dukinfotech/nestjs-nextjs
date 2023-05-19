@@ -1,0 +1,10 @@
+{
+  "name": "nestjs-nextjs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/dukinfotech/nestjs-nextjs.git",
+  "license": "MIT",
+  "dependencies": {
+    "@nestjs/cli": "^9.5.0"
+  }
+}
