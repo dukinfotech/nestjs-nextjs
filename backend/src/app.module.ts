@@ -17,7 +17,7 @@ import { ConfigModule } from '@nestjs/config';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       playground: process.env.APP_ENV === 'development', // If true, create '/graphql' route for debugging
-      autoSchemaFile: path.join(process.cwd(), 'src/generated/graphql/schema.gql'), // Config schema.gql file place
+      autoSchemaFile: path.join(process.cwd(), process.env.BACKEND_GRAPHQL_DEFINITION_PATH), // Config schema.gql file place
       sortSchema: true,
     }),
     PostsModule
