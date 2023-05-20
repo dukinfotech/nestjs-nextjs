@@ -5,6 +5,7 @@ import { PostsModule } from './modules/posts/posts.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { EnvModule } from './config/enviroments/env.module';
 import { EnvService } from './config/enviroments/env.service';
+import { PrismaModule } from './config/prisma/prisma.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { EnvService } from './config/enviroments/env.service';
       useFactory: (envService: EnvService) =>
         envService.GqlModuleOptionsFactory,
     }),
+    PrismaModule,
     PostsModule,
   ],
   controllers: [AppController],

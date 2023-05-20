@@ -1,8 +1,8 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Query, Resolver } from '@nestjs/graphql';
 import { PostModel } from './post.model';
 import { PrismaService } from 'src/config/prisma/prisma.service';
 
-@Resolver((of) => PostModel)
+@Resolver(() => PostModel)
 export class PostsResolver {
   constructor(private prismaService: PrismaService) {}
 
