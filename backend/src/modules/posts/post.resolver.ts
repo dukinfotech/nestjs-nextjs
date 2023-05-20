@@ -1,21 +1,13 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { PostModel } from './post.model';
+import { PrismaService } from 'src/config/prisma/prisma.service';
 
 @Resolver((of) => PostModel)
 export class PostsResolver {
-  constructor() {}
+  constructor(private prismaService: PrismaService) {}
 
   @Query(() => [PostModel], { name: 'posts', nullable: true })
   async getPosts() {
-    return [
-      {
-        id: '1',
-        title: 'NestJS is so good.',
-      },
-      {
-        id: '2',
-        title: 'GraphQL is so good.',
-      },
-    ];
+    return await this.prismaService.post.findMany();
   }
 }
