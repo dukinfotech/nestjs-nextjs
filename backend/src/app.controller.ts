@@ -1,12 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { EnvService } from './config/enviroments/env.service';
 
 @Controller()
 export class AppController {
-  constructor(private configService: ConfigService) {}
+  constructor(private envService: EnvService) {}
 
   @Get()
   getHello(): string {
-    return 'Enviroment: ' + this.configService.get<string>('APP_ENV');
+    return 'Enviroment: ' + this.envService.appEnv;
   }
 }
