@@ -13,7 +13,7 @@ const config: CodegenConfig = {
   schema: path.join(
     path.dirname(process.cwd()),
     "backend",
-    process.env.BACKEND_GRAPHQL_DEFINITION_PATH as string
+    process.env.GRAPHQL_DEFINITION_PATH as string
   ),
   documents: ["app/**/*.tsx"],
   generates: {

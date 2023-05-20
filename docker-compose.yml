@@ -1,0 +1,16 @@
+version: "3"
+
+volumes:
+  db-data:
+
+services:
+  postgres:
+    image: postgres:alpine3.18
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/${DB_NAME}/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
