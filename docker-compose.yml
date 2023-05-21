@@ -3,6 +3,11 @@ version: "3"
 volumes:
   db-data:
 
+networks:
+  default:
+    external:
+      name: network
+
 services:
   postgres:
     image: postgres:alpine3.18
@@ -14,3 +19,30 @@ services:
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+  nginx:
+    image: nginx:stable-alpine3.17
+    restart: always
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/usr/src/app/src
+    ports:
+      - "3001:3001"
+    command: ['npm', 'run', 'start:dev']
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/usr/src/app/src
+    ports:
+      - "3001:3001"
+    command: ['npm', 'run', 'start:dev']
+    
