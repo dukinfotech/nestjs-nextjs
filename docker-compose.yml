@@ -5,12 +5,12 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-      target: production
+      target: ${APP_ENV}
     volumes:
       - ./backend/src:/usr/src/app/src # Mount src folder in host machine to the container
       - ./backend/package.json:/usr/src/app/package.json
       - .env:/usr/src/.env
-    command: [sh, -c, "npm run migrate:prod && npm run start:prod"]
+    command: [sh, -c, "npm run migrate:${APP_ENV} && npm run start:${APP_ENV}"]
     ports:
       - "8080:8080"
   database:
@@ -31,9 +31,9 @@ services:
     ports:
       - "80:80"
       - "443:443"
-
+    
 volumes: # Create user defined volumn for sharing data among multiple services
-  app-data:
+  app-data: 
 
 # networks: # Create user defined network for comunicating among multiple services
 #   app-network:

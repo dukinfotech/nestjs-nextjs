@@ -16,17 +16,17 @@
       "type": "node",
       "request": "launch",
       "name": "Start Backend",
-      "runtimeExecutable": "yarn",
+      "runtimeExecutable": "npm",
       "cwd": "${workspaceFolder}/backend",
-      "runtimeArgs": ["start:dev"],
+      "runtimeArgs": ["run", "start:development"],
     },
     {
       "type": "node",
       "request": "launch",
       "name": "Migrate DB",
-      "runtimeExecutable": "yarn",
+      "runtimeExecutable": "npm",
       "cwd": "${workspaceFolder}/backend",
-      "runtimeArgs": ["migrate:db"],
+      "runtimeArgs": ["run", "migrate:development"],
     }
   ]
 }
