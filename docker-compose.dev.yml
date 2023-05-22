@@ -7,8 +7,9 @@ services:
       dockerfile: Dockerfile
       target: development
     volumes:
-      - ./backend:/usr/src/app # Mount source code folder in host machine to the container
-      - ./.env:/usr/src/app/.env
+      - ./backend/src:/usr/src/app/src # Mount src folder in host machine to the container
+      - ./backend/package.json:/usr/src/app/package.json
+      - .env:/usr/src/.env
     command: npm run start:dev
     ports:
       - "8080:8080"
