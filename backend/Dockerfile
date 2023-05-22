@@ -27,9 +27,9 @@ COPY package*.json ./
 RUN npm install --omit=dev
 
 COPY . .
-# Run the build command which creates the production bundle
-RUN npm run build
 # Read Prisma schema and updates the generated Prisma Client library inside node_modules/@prisma/client
 RUN npx prisma generate
+# Run the build command which creates the production bundle
+RUN npm run build
 # Use the node user from the image (instead of the root user)
 CMD ["node", "dist/main"]
