@@ -5,7 +5,8 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-      target: ${APP_ENV}
+      args:
+        - APP_ENV=${APP_ENV} # Pass APP_ENV arg to Dockerfile
     volumes:
       - ./backend/src:/usr/src/app/src # Mount src folder in host machine to the container
       - ./backend/package.json:/usr/src/app/package.json
