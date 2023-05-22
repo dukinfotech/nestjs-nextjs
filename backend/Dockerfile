@@ -8,6 +8,8 @@ WORKDIR /usr/src/app
 COPY . .
 # Install the dev dependencies
 RUN npm install --only=development
+# Read Prisma schema and updates the generated Prisma Client library inside node_modules/@prisma/client
+RUN npx prisma generate
 
 ###################
 # BUILD FOR PRODUCTION
@@ -23,5 +25,3 @@ RUN npm install --omit=dev
 RUN npx prisma generate
 # Run the build command which creates the production bundle (need to exclude @nestjs/cli package from devDependencies)
 RUN npm run build
-# Run app
-CMD ["node", "dist/main"]
