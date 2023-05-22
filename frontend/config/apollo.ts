@@ -1,6 +1,12 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloClient, HttpLink, InMemoryCache, from } from '@apollo/client';
 
+const httpLink = new HttpLink({
+  uri: process.env.APP_URL + '/api/graphql',
+  credentials: 'same-origin' // Send the cookie along with every request
+})
 export const apolloClient = new ApolloClient({
-  uri: process.env.BACKEND_URL + '/graphql',
+  link: from([
+    httpLink
+  ]),
   cache: new InMemoryCache(),
 });

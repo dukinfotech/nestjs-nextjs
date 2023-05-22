@@ -1,27 +1,6 @@
 version: "3"
 
-volumes:
-  db-data:
-
 services:
-  postgres:
-    image: postgres:15.3-alpine
-    restart: always
-    volumes:
-      - db-data:/var/lib/postgresql/${DB_NAME}/data
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-  nginx:
-    image: nginx:stable-alpine
-    restart: always
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
   backend:
     build:
       context: ./backend
@@ -33,3 +12,27 @@ services:
     command: npm run start:dev
     ports:
       - "8080:8080"
+  database:
+    image: postgres:15.3-alpine
+    restart: always
+    volumes:
+      - app-data:/var/lib/postgresql/${DB_NAME}/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+  proxy:
+    restart: always
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    
+volumes: # Create user defined volumn for sharing data among multiple services
+  app-data: 
+
+# networks: # Create user defined network for comunicating among multiple services
+#   app-network:
