@@ -8,9 +8,9 @@
       "type": "node",
       "request": "launch",
       "name": "Start Frontend",
-      "runtimeExecutable": "yarn",
+      "runtimeExecutable": "npm",
       "cwd": "${workspaceFolder}/frontend",
-      "runtimeArgs": ["dev"],
+      "runtimeArgs": ["run", "start:development"],
     },
     {
       "type": "node",

@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start:development": "next dev",
+    "start:production": "next start",
     "lint": "next lint",
     "compile": "graphql-codegen",
     "watch": "graphql-codegen -w"
@@ -25,7 +25,5 @@
     "typescript": "^5.0.4"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^3.3.1",
-    "@graphql-codegen/client-preset": "^3.0.1"
   }
 }

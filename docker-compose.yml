@@ -1,6 +1,21 @@
 version: "3"
 
 services:
+  frontend:
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+      args:
+        - APP_ENV=${APP_ENV} # Pass APP_ENV arg to Dockerfile
+    volumes:
+      - ./frontend/app:/usr/src/app/app # Mount src folder in host machine to the container
+      - ./frontend/config:/usr/src/app/config
+      - ./frontend/public:/usr/src/app/public
+      - ./frontend/package.json:/usr/src/app/package.json
+      - ./.env:/usr/src/app/.env.local
+    command: [sh, -c, "npm run start:${APP_ENV}"]
+    ports:
+      - "3000:3000"
   backend:
     build:
       context: ./backend
