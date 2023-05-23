@@ -1,29 +1,12 @@
-import { apolloClient } from '../config/apollo';
-import { gql } from '@apollo/client';
+import ClientComponent from "../components/ClientComponent";
+import ServerComponent from "../components/ServerComponent";
 
-async function fetchData() {
-  const postsQuery = gql`
-    query {
-      posts {
-        id
-        title
-      }
-    }
-  `;
-
-  const { data } = await apolloClient.query({ query: postsQuery });
-  return data;
-};
-
-export default async function Home() {
-  const data = await fetchData();
-  console.log(data);
-
+export default function Home() {
   return (
     <main>
-      <ul>
-        <li></li>
-      </ul>
+      <ClientComponent />
+      {/* @ts-expect-error Server Component */}
+      <ServerComponent />
     </main>
   )
 }

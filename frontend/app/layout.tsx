@@ -1,4 +1,5 @@
 import './globals.css'
+import ApolloProvider from '../providers/apollo_provider'
 
 export const metadata = {
   title: 'Create Next App',
@@ -12,7 +13,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <ApolloProvider>{children}</ApolloProvider>
+      </body>
     </html>
   )
 }

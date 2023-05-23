@@ -7,8 +7,10 @@ services:
       dockerfile: ./frontend/Dockerfile
       args:
         - APP_ENV=${APP_ENV} # Pass APP_ENV arg to Dockerfile
-    volumes:
-      - ./frontend/app:/usr/src/app/app # Mount src folder in host machine to the container (trick for hot reloading)
+    volumes: # Mount src folder in host machine to the container (trick for hot reloading)
+      - ./frontend/app:/usr/src/app/app
+      - ./frontend/components:/usr/src/app/components
+      - ./frontend/providers:/usr/src/app/providers
       - ./frontend/config:/usr/src/app/config
       - ./frontend/public:/usr/src/app/public
       - .env:/usr/src/.env
@@ -21,8 +23,8 @@ services:
       dockerfile: Dockerfile
       args:
         - APP_ENV=${APP_ENV} # Pass APP_ENV arg to Dockerfile
-    volumes:
-      - ./backend/src:/usr/src/app/src # Mount src folder in host machine to the container (trick for hot reloading)
+    volumes: # Mount src folder in host machine to the container (trick for hot reloading)
+      - ./backend/src:/usr/src/app/src
       - .env:/usr/src/.env
     command: [sh, -c, "npm run migrate:${APP_ENV} && npm run start:${APP_ENV}"]
     ports:
