@@ -11,7 +11,7 @@
     "start": "nest start",
     "start:development": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:production": "node dist/main",
+    "start:production": "node dist/src/main",
     "migrate:development": "npx env-cmd --file ../.env prisma migrate dev",
     "migrate:production": "npx env-cmd --file ../.env prisma migrate deploy",
     "prisma:generate": "npx env-cmd --file ../.env prisma generate",
