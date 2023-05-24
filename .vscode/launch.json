@@ -23,7 +23,15 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Migrate DB",
+      "name": "Prisma Generate",
+      "runtimeExecutable": "npm",
+      "cwd": "${workspaceFolder}/backend",
+      "runtimeArgs": ["run", "prisma:generate"],
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Prisma Migrate",
       "runtimeExecutable": "npm",
       "cwd": "${workspaceFolder}/backend",
       "runtimeArgs": ["run", "migrate:development"],
