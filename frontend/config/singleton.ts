@@ -1,10 +1,12 @@
+import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+
 export interface SingletonAbstract {
-  apolloClient?: any
+  apolloClient?: ApolloClient<NormalizedCacheObject>
 }
 
 export class Singleton {
   static instance: SingletonAbstract = {
-    apolloClient: null
+    apolloClient: undefined
   };
 
   static getInstance() {

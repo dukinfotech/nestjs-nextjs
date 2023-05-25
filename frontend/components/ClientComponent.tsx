@@ -1,28 +1,15 @@
 'use client';
 
-import { gql } from "@/generated";
 import { useQuery } from "@apollo/client";
 import { useEffect } from "react";
-
-export const LIST_POSTS = gql(
-	`
-    query listPosts {
-      posts {
-        id
-        title
-      }
-    }
-  `
-);
+import { LIST_POSTS } from "./ServerComponent";
 
 export default function ClientComponent() {
-	
-
 	const { loading, error, data } = useQuery(LIST_POSTS)
 
 	useEffect(() => {
 		if (data) {
-			console.log(data);
+			console.log(data.posts);
 		}
 	}, [data]);
 

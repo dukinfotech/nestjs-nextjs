@@ -16,6 +16,7 @@ if (!apolloClient) {
     ]),
     cache: new InMemoryCache(),
   });
+  apolloClient
   Singleton.setInstance({ ...singleton, apolloClient });
 }
 

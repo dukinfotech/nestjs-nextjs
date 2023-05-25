@@ -1,23 +1,26 @@
+import { ListPostsQuery } from '@/generated/graphql';
 import { apolloClient } from '../config/apollo';
-import { gql } from '@apollo/client';
+import { gql } from "@/generated";
 
-async function fetchData() {
-  const postsQuery = gql`
-    query {
+export const LIST_POSTS = gql(
+	`
+    query listPosts {
       posts {
         id
         title
       }
     }
-  `;
+  `
+);
 
-  const { loading, error, data } = await apolloClient.query({ query: postsQuery });
+async function fetchData() {
+  const { loading, error, data } = await apolloClient!.query<ListPostsQuery>({ query: LIST_POSTS });
   return data;
 };
 
 export default async function ServerComponent() {
   const data = await fetchData();
-  console.log(data);
+  console.log(data.posts);
 
   return (
 		<h4>Server Component</h4>
