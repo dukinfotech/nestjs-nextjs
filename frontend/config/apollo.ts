@@ -6,7 +6,7 @@ let apolloClient = singleton.apolloClient;
 
 if (!apolloClient) {
   const httpLink = new HttpLink({
-    uri: process.env.BACKEND_URL + '/graphql',
+    uri: process.env.APP_HOST + '/api/graphql',
     credentials: 'same-origin' // Send the cookie along with every request
   });
 
