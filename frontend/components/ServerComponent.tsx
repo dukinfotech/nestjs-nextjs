@@ -14,7 +14,7 @@ export const LIST_POSTS = gql(
 );
 
 async function fetchData() {
-  const { loading, error, data } = await apolloClient!.query<ListPostsQuery>({ query: LIST_POSTS });
+  const { loading, error, data } = await apolloClient.query<ListPostsQuery>({ query: LIST_POSTS });
   return data;
 };
 
