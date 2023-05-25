@@ -20,6 +20,8 @@ services:
   backend:
     depends_on: # For fetching data when building production frontend
       - database
+    stdin_open: true # https://github.com/prisma/prisma/issues/4669
+    tty: true 
     build:
       context: ./backend
       dockerfile: Dockerfile
