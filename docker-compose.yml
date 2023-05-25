@@ -18,12 +18,15 @@ services:
     ports:
       - "3000:3000"
   backend:
+    depends_on: # For fetching data when building production frontend
+      - database
     build:
       context: ./backend
       dockerfile: Dockerfile
       args:
         - APP_ENV=${APP_ENV} # Pass APP_ENV arg to Dockerfile
     volumes: # Mount src folder in host machine to the container (trick for hot reloading)
+      - ./backend/generated:/usr/src/app/generated
       - ./backend/src:/usr/src/app/src
       - .env:/usr/src/.env
     command: [sh, -c, "npm run migrate:${APP_ENV} && npm run start:${APP_ENV}"]
@@ -40,6 +43,9 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
   proxy:
+    depends_on: # For checking connecting to upstream
+      - frontend
+      - backend
     restart: always
     build:
       context: ./nginx
