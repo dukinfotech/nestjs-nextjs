@@ -7,8 +7,8 @@
     "start:development": "next dev",
     "start:production": "next start",
     "lint": "next lint",
-    "compile": "graphql-codegen",
-    "watch": "graphql-codegen -w"
+    "graphql-codegen:compile": "npx env-cmd --file ../.env graphql-codegen",
+    "graphql-codegen:watch": "npx env-cmd --file ../.env graphql-codegen -w"
   },
   "dependencies": {
     "@apollo/client": "^3.7.14",
@@ -16,6 +16,7 @@
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
     "dotenv": "^16.0.3",
+    "env-cmd": "^10.1.0",
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.3",
     "graphql": "^16.6.0",
@@ -25,5 +26,7 @@
     "typescript": "^5.0.4"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^4.0.0",
+    "@graphql-codegen/client-preset": "^4.0.0"
   }
 }

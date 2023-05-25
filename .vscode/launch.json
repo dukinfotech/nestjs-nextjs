@@ -23,6 +23,14 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Graphql Codegen",
+      "runtimeExecutable": "npm",
+      "cwd": "${workspaceFolder}/frontend",
+      "runtimeArgs": ["run", "graphql-codegen:compile"],
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Prisma Generate",
       "runtimeExecutable": "npm",
       "cwd": "${workspaceFolder}/backend",
