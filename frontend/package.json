@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.14",
+    "@nextui-org/react": "^1.0.0-beta.13",
     "@types/node": "20.2.1",
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
@@ -21,6 +22,7 @@
     "eslint-config-next": "13.4.3",
     "graphql": "^16.6.0",
     "next": "13.4.3",
+    "next-themes": "^0.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "^5.0.4"
