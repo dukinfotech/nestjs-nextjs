@@ -43,6 +43,14 @@
       "runtimeExecutable": "npm",
       "cwd": "${workspaceFolder}/backend",
       "runtimeArgs": ["run", "migrate:development"],
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Prisma Seed",
+      "runtimeExecutable": "npm",
+      "cwd": "${workspaceFolder}/backend",
+      "runtimeArgs": ["run", "prisma:seed"],
     }
   ]
 }

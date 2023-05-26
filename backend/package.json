@@ -15,6 +15,7 @@
     "migrate:development": "npx env-cmd --file ../.env prisma migrate dev",
     "migrate:production": "npx env-cmd --file ../.env prisma migrate deploy",
     "prisma:generate": "npx env-cmd --file ../.env prisma generate",
+    "prisma:seed": "npx env-cmd --file ../.env node --loader ts-node/esm ./prisma/seed.ts",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",

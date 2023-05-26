@@ -17,21 +17,83 @@ datasource db {
   url      = env("DB_URL")
 }
 
-model Post {
- id           String    @id @default(uuid())
- title        String
- emoji        String?
- type         String
- thumbNailUrl String?   @map("thumb_nail_url")
- excerpt      String?
- contentPath  String    @unique @map("content_path")
- md5Hash      String    @map("md5_hash")
- published    Boolean?  @default(false)
- publishDate  DateTime? @map("publish_date")
- like         Int       @default(0)
- createdAt    DateTime  @default(now()) @map("created_at")
- updatedAt    DateTime  @updatedAt @map("updated_at")
+model User {
+  id             String       @id @default(cuid())
+  name           String       @db.VarChar(30)
+  username       String       @unique @db.VarChar(20)
+  password       String?      // Sign in by third-party providers
+  email          String       @unique
+  role           Role         @default(USER)
+  posts          Post[]
+  profile        Profile?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
 
- @@index([contentPath])
- @@map("posts")
+  @@index([username, email])
+  @@map("users")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Profile {
+  id             String       @id @default(cuid())
+  bio            String?       @db.VarChar(150)
+  facebook       String?
+  twitter        String?
+  tiktok         String?
+  user           User         @relation(fields: [userId], references: [id])
+  userId         String       @unique
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+
+  @@map("profiles")
+}
+
+model Post {
+  id             String       @id @default(cuid())
+  title          String       @db.VarChar(60)
+  content        String       @db.Text
+  summary        String?      @db.VarChar(300)
+  thumbNailUrl   String?
+  like           Int          @default(0)
+  author         User         @relation(fields: [authorId], references: [id])
+  authorId       String
+  publishDate    DateTime?
+  categories     Category[]
+  tags           Tag[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+
+  @@index([title, summary])
+  @@map("posts")
+}
+
+model Tag {
+  id             String       @id @default(cuid())
+  title          String       @unique @db.VarChar(30)
+  posts          Post[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+
+  @@index([title])
+  @@map("tags")
+}
+
+model Category {
+  id             String       @id @default(cuid())
+  name           String       @unique @db.VarChar(60)
+  posts          Post[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+
+  @@index([name])
+  @@map("categories")
 }
