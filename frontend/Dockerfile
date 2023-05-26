@@ -7,6 +7,8 @@ COPY ./frontend .
 COPY ./.env ./.env.local
 # Get APP_ENV arg from docker-compose file
 ARG APP_ENV
+# Set NODE_ENV for hiding stack traces in production
+ENV NODE_ENV=${APP_ENV}
 # Install dependencies
 RUN if [ "${APP_ENV}" = "development" ]; then \
         npm install --only=development; \
