@@ -18,8 +18,9 @@ services:
     ports:
       - "3000:3000"
   backend:
-    depends_on: # For fetching data when building production frontend
-      - database
+    depends_on: # For migrating database and generate static page when building frontend production
+      database:
+        condition: service_healthy
     stdin_open: true # https://github.com/prisma/prisma/issues/4669
     tty: true 
     build:
@@ -37,6 +38,11 @@ services:
   database:
     image: postgres:15.3-alpine
     restart: always
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${DB_NAME}"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
     volumes:
       - app-data:/var/lib/postgresql/${DB_NAME}/data
     ports:
@@ -45,7 +51,7 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
   proxy:
-    depends_on: # For checking connecting to upstream
+    depends_on: # For bypass checking connecting to upstream
       - frontend
       - backend
     restart: always
