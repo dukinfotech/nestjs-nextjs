@@ -6,6 +6,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { EnvModule } from './config/enviroments/env.module';
 import { EnvService } from './config/enviroments/env.service';
 import { PrismaModule } from './config/prisma/prisma.module';
+import { AuthJwtModule } from './modules/users/auth/jwt.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { PrismaModule } from './config/prisma/prisma.module';
         envService.GqlModuleOptionsFactory,
     }),
     PrismaModule,
+    AuthJwtModule,
     PostsModule,
   ],
   controllers: [AppController],
