@@ -12,6 +12,7 @@ services:
       - ./frontend/components:/usr/src/app/components
       - ./frontend/providers:/usr/src/app/providers
       - ./frontend/config:/usr/src/app/config
+      - ./frontend/generated:/usr/src/app/generated
       - ./frontend/public:/usr/src/app/public
       - .env:/usr/src/.env
     command: [sh, -c, "npm run start:${APP_ENV}"]
