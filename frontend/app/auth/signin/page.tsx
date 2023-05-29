@@ -3,6 +3,7 @@
 import { gql } from "@/generated";
 import { useLazyQuery } from "@apollo/client";
 import {
+  Badge,
   Button,
   Checkbox,
   Input,
@@ -12,16 +13,21 @@ import {
   Text,
 } from "@nextui-org/react";
 import { signIn } from "next-auth/react";
-import { useParams, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export const SIGN_IN = gql(
   `
     query signIn($email: String!, $password: String!) {
       signIn(email: $email, password: $password) {
-        name,
-        username,
-        email,
+        id
+        name
+        username
+        email
+        role
+        createdAt
+        updatedAt
+        deletedAt
       }
     }
   `
@@ -38,21 +44,25 @@ export default function SignInPage() {
     password: "@Password888",
   };
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/';
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+  const error = searchParams.get("error");
   const [signInForm, setSignInForm] = useState<SignInForm>(signInFormDefault);
-  const [signInQuery, { called, loading, data }] = useLazyQuery(SIGN_IN, {
-    variables: signInForm
-  });
+  const [querySignIn, { called, loading, data }] = useLazyQuery(SIGN_IN);
 
   const handleSignIn = async () => {
     if (signInForm.email && signInForm.password) {
-      await signInQuery();
-      if (called && data) {
-        signIn("credentials", { redirect: false, ...data.signIn, callbackUrl });
-      }
+      await querySignIn({ variables: signInForm });
     }
   };
 
+  useEffect(() => {
+    if (called && !loading) {
+      const payload = data ? data.signIn : null;
+      signIn("credentials", { ...payload, callbackUrl });
+    }
+  }, [loading]);
+
+  // TODO: UI/UX
   return (
     <Modal
       aria-labelledby="modal-title"
@@ -65,6 +75,8 @@ export default function SignInPage() {
         <Text h3>Login</Text>
       </Modal.Header>
       <Modal.Body>
+        {error && <Text h3 color="error">{error}</Text>}
+        <Spacer y={0.1} />
         <Input
           initialValue={signInFormDefault.email}
           shadow={false}

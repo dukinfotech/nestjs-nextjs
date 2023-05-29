@@ -1,21 +1,27 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { useEffect } from "react";
 import { LIST_POSTS } from "./ServerComponent";
 import { Button } from "@nextui-org/react";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function ClientComponent() {
-  const { loading, error, data } = useQuery(LIST_POSTS);
+  const [queryListPosts, { called, loading, data }] = useLazyQuery(LIST_POSTS);
   const { status } = useSession();
   const isAuthenticated = status === "authenticated";
 
   useEffect(() => {
-    if (data) {
-      console.log(data.posts);
+    if (isAuthenticated) {
+      queryListPosts();
     }
-  }, [data]);
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (called && !loading) {
+      console.log(data?.posts);
+    }
+  }, [loading]);
 
   return (
     <>
