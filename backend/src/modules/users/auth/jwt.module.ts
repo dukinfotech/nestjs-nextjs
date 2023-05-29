@@ -12,7 +12,7 @@ import { AuthJwtResolver } from './jwt.resolver';
     JwtModule.register({
       secret: process.env.NEXTAUTH_SECRET, // Same token & algorithm as frontend
       signOptions: {
-        expiresIn: '1h',
+        expiresIn: Number(process.env.NEXTAUTH_JWT_EXPIRE),
         algorithm: 'HS512',
       },
     }),
