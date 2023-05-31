@@ -12,7 +12,7 @@ export class AuthJwtGuard extends AuthGuard('jwt') {
   }
 }
 
-// Create @CurrentUser decorator to get current user
+// Create @CurrentUser decorator to get current user from return of validate() method
 export const CurrentUser = createParamDecorator(
   (data: unknown, context: ExecutionContext) => {
     const ctx = GqlExecutionContext.create(context);
