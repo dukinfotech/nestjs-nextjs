@@ -9,7 +9,7 @@ declare module "next-auth" {
       username: string,
       email: string,
       role: string,
-      access_token: string,
+      accessToken: string,
       createdAt: Date,
       updatedAt: Date,
       deletedAt?: Date
@@ -24,7 +24,7 @@ declare module "next-auth/jwt" {
     username: string,
     email: string,
     role: string,
-    access_token: string,
+    accessToken: string,
     createdAt: Date,
     updatedAt: Date,
     deletedAt?: Date

@@ -13,7 +13,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n    query signIn($email: String!, $password: String!) {\n      signIn(email: $email, password: $password) {\n        id\n        name\n        username\n        email\n        role\n        access_token\n        createdAt\n        updatedAt\n        deletedAt\n      }\n    }\n  ": types.SignInDocument,
+    "\n    query signIn($email: String!, $password: String!) {\n      signIn(email: $email, password: $password) {\n        id\n        name\n        username\n        email\n        role\n        accessToken\n        createdAt\n        updatedAt\n        deletedAt\n      }\n    }\n  ": types.SignInDocument,
     "\n    query listPosts {\n      posts {\n        id\n        title\n      }\n    }\n  ": types.ListPostsDocument,
 };
 
@@ -34,7 +34,7 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n    query signIn($email: String!, $password: String!) {\n      signIn(email: $email, password: $password) {\n        id\n        name\n        username\n        email\n        role\n        access_token\n        createdAt\n        updatedAt\n        deletedAt\n      }\n    }\n  "): (typeof documents)["\n    query signIn($email: String!, $password: String!) {\n      signIn(email: $email, password: $password) {\n        id\n        name\n        username\n        email\n        role\n        access_token\n        createdAt\n        updatedAt\n        deletedAt\n      }\n    }\n  "];
+export function gql(source: "\n    query signIn($email: String!, $password: String!) {\n      signIn(email: $email, password: $password) {\n        id\n        name\n        username\n        email\n        role\n        accessToken\n        createdAt\n        updatedAt\n        deletedAt\n      }\n    }\n  "): (typeof documents)["\n    query signIn($email: String!, $password: String!) {\n      signIn(email: $email, password: $password) {\n        id\n        name\n        username\n        email\n        role\n        accessToken\n        createdAt\n        updatedAt\n        deletedAt\n      }\n    }\n  "];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

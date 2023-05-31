@@ -8,7 +8,7 @@ import { PrismaService } from 'src/config/prisma/prisma.service';
 @ObjectType()
 export class SignInResponse extends User {
   @Field(() => String, {nullable:false})
-  access_token!: string;
+  accessToken!: string;
 }
 
 @Resolver(() => User)
@@ -36,7 +36,7 @@ export class AuthJwtResolver {
 
         return {
           ...userWithOutPassword,
-          access_token: this.jwtService.sign(payload)
+          accessToken: this.jwtService.sign(payload)
         };
       }
     }
