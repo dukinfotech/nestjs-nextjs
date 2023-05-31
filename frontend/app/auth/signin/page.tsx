@@ -25,6 +25,7 @@ export const SIGN_IN = gql(
         username
         email
         role
+        access_token
         createdAt
         updatedAt
         deletedAt

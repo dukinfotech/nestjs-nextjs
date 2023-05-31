@@ -1,9 +1,15 @@
 import { UnauthorizedException } from '@nestjs/common';
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Field, ObjectType, Query, Resolver } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { User } from 'generated/user/user.model';
 import { PrismaService } from 'src/config/prisma/prisma.service';
+
+@ObjectType()
+export class SignInResponse extends User {
+  @Field(() => String, {nullable:false})
+  access_token!: string;
+}
 
 @Resolver(() => User)
 export class AuthJwtResolver {
@@ -12,7 +18,7 @@ export class AuthJwtResolver {
     private jwtService: JwtService,
   ) {}
 
-  @Query(() => User, { name: 'signIn' })
+  @Query(() => SignInResponse, { name: 'signIn' })
   async signIn(
     @Args('email', { type: () => String }) email: string,
     @Args('password', { type: () => String }) password: string,
@@ -28,8 +34,10 @@ export class AuthJwtResolver {
         const { password, ...userWithOutPassword } = user;
         const payload = { id: user.id, email: user.email };
 
-        this.jwtService.signAsync(payload);
-        return userWithOutPassword;
+        return {
+          ...userWithOutPassword,
+          access_token: this.jwtService.sign(payload)
+        };
       }
     }
 

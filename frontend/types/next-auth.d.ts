@@ -9,6 +9,7 @@ declare module "next-auth" {
       username: string,
       email: string,
       role: string,
+      access_token: string,
       createdAt: Date,
       updatedAt: Date,
       deletedAt?: Date
@@ -17,13 +18,13 @@ declare module "next-auth" {
 }
 
 declare module "next-auth/jwt" {
-  // Mapping data from authorize method's return
   interface JWT {
     id: string,
     name: string,
     username: string,
     email: string,
     role: string,
+    access_token: string,
     createdAt: Date,
     updatedAt: Date,
     deletedAt?: Date
