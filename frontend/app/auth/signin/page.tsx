@@ -1,9 +1,8 @@
 "use client";
 
 import { gql } from "@/generated";
-import { useLazyQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import {
-  Badge,
   Button,
   Checkbox,
   Input,
@@ -18,14 +17,17 @@ import { useEffect, useState } from "react";
 
 export const SIGN_IN = gql(
   `
-    query signIn($email: String!, $password: String!) {
+    mutation signIn($email: String!, $password: String!) {
       signIn(email: $email, password: $password) {
         id
         name
         username
         email
-        role
+        roles {
+          name
+        }
         accessToken
+        refreshToken
         createdAt
         updatedAt
         deletedAt
@@ -48,11 +50,11 @@ export default function SignInPage() {
   const callbackUrl = searchParams.get("callbackUrl") || "/";
   const error = searchParams.get("error");
   const [signInForm, setSignInForm] = useState<SignInForm>(signInFormDefault);
-  const [querySignIn, { called, loading, data }] = useLazyQuery(SIGN_IN);
+  const [mutateSignIn, { called, loading, data }] = useMutation(SIGN_IN);
 
   const handleSignIn = async () => {
     if (signInForm.email && signInForm.password) {
-      await querySignIn({ variables: signInForm });
+      await mutateSignIn({ variables: signInForm });
     }
   };
 
@@ -76,7 +78,11 @@ export default function SignInPage() {
         <Text h3>Login</Text>
       </Modal.Header>
       <Modal.Body>
-        {error && <Text h3 color="error">{error}</Text>}
+        {error && (
+          <Text h3 color="error">
+            {error}
+          </Text>
+        )}
         <Spacer y={0.1} />
         <Input
           initialValue={signInFormDefault.email}
