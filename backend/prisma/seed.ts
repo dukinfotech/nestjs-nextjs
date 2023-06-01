@@ -13,7 +13,7 @@ async function main() {
       name: 'Admin',
       username: 'admin',
       email: 'admin@example.com',
-      password: hashPassword,
+      hashedPassword: hashPassword,
       roles: {
         create: [{ name: 'admin' }],
       },
@@ -29,7 +29,7 @@ async function main() {
       name: 'User',
       username: 'user',
       email: 'user@example.com',
-      password: hashPassword,
+      hashedPassword: hashPassword,
       roles: {
         create: [{ name: 'user' }],
       },

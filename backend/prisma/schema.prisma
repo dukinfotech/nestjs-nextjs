@@ -9,7 +9,7 @@ generator nestgraphql {
   provider = "node node_modules/prisma-nestjs-graphql"
   // for yarn monorepos
   // provider = "prisma-nestjs-graphql"
-  output = "../generated"
+  output   = "../generated"
 }
 
 datasource db {
@@ -18,106 +18,106 @@ datasource db {
 }
 
 model User {
-  id             String       @id @default(cuid())
-  name           String       @db.VarChar(30)
-  username       String       @unique @db.VarChar(20)
-  password       String?      // Sign in by third-party providers
-  email          String       @unique @db.VarChar(254)
-  posts          Post[]
-  profile        Profile?
-  refreshToken   String?
-  roles          Role[]
-  permissions    Permission[]
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  deletedAt      DateTime?
+  id                 String       @id @default(cuid())
+  name               String       @db.VarChar(30)
+  username           String       @unique @db.VarChar(20)
+  hashedPassword     String? // Sign in by third-party providers
+  email              String       @unique @db.VarChar(254)
+  posts              Post[]
+  profile            Profile?
+  hashedRefreshToken String?
+  roles              Role[]
+  permissions        Permission[]
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  deletedAt          DateTime?
 
   @@index([username, email])
   @@map("users")
 }
 
 model Role {
-  id             String       @id @default(cuid())
-  name           String       @unique @db.VarChar(30) @default("user")
-  permissions    Permission[]
-  users          User[]
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  deletedAt      DateTime?
+  id          String       @id @default(cuid())
+  name        String       @unique @default("user") @db.VarChar(30)
+  permissions Permission[]
+  users       User[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  deletedAt   DateTime?
 
   @@index([name])
   @@map("roles")
 }
 
 model Permission {
-  id             String       @id @default(cuid())
-  name           String       @unique @db.VarChar(30)
-  roles          Role[]
-  users          User[]
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  deletedAt      DateTime?
+  id        String    @id @default(cuid())
+  name      String    @unique @db.VarChar(30)
+  roles     Role[]
+  users     User[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   @@index([name])
   @@map("permissions")
 }
 
 model Profile {
-  id             String       @id @default(cuid())
-  avatarUrl      String?
-  bio            String?      @db.VarChar(150)
-  facebook       String?      @db.VarChar(50)
-  instagram      String?      @db.VarChar(30)
-  twitter        String?      @db.VarChar(15)
-  tiktok         String?      @db.VarChar(24)
-  user           User         @relation(fields: [userId], references: [id])
-  userId         String       @unique
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  deletedAt      DateTime?
+  id        String    @id @default(cuid())
+  avatarUrl String?
+  bio       String?   @db.VarChar(150)
+  facebook  String?   @db.VarChar(50)
+  instagram String?   @db.VarChar(30)
+  twitter   String?   @db.VarChar(15)
+  tiktok    String?   @db.VarChar(24)
+  user      User      @relation(fields: [userId], references: [id])
+  userId    String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   @@map("profiles")
 }
 
 model Post {
-  id             String       @id @default(cuid())
-  title          String       @unique @db.VarChar(60)
-  content        String       @db.Text
-  summary        String?      @unique @db.VarChar(300)
-  thumbNailUrl   String?
-  like           Int          @default(0)
-  author         User         @relation(fields: [authorId], references: [id])
-  authorId       String
-  publishDate    DateTime?
-  categories     Category[]
-  tags           Tag[]
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  deletedAt      DateTime?
+  id           String     @id @default(cuid())
+  title        String     @unique @db.VarChar(60)
+  content      String     @db.Text
+  summary      String?    @unique @db.VarChar(300)
+  thumbNailUrl String?
+  like         Int        @default(0)
+  author       User       @relation(fields: [authorId], references: [id])
+  authorId     String
+  publishDate  DateTime?
+  categories   Category[]
+  tags         Tag[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  deletedAt    DateTime?
 
   @@index([title, summary])
   @@map("posts")
 }
 
 model Tag {
-  id             String       @id @default(cuid())
-  name          String        @unique @db.VarChar(30)
-  posts          Post[]
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  deletedAt      DateTime?
+  id        String    @id @default(cuid())
+  name      String    @unique @db.VarChar(30)
+  posts     Post[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   @@index([name])
   @@map("tags")
 }
 
 model Category {
-  id             String       @id @default(cuid())
-  name           String       @unique @db.VarChar(60)
-  posts          Post[]
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  deletedAt      DateTime?
+  id        String    @id @default(cuid())
+  name      String    @unique @db.VarChar(60)
+  posts     Post[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   @@index([name])
   @@map("categories")
