@@ -1,14 +1,23 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { EnvService } from 'src/config/enviroments/env.service';
 import { PrismaService } from 'src/config/prisma/prisma.service';
 
 @Injectable()
 export class AuthJwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private prismaService: PrismaService) {
+  constructor(
+    private prismaService: PrismaService,
+    private envService: EnvService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: process.env.NEXTAUTH_SECRET, // Same token & algorithm as frontend
+      secretOrKey: envService.appSecret,
+      ignoreExpiration: false,
       algorithms: ['HS256'],
     });
   }
@@ -20,12 +29,12 @@ export class AuthJwtStrategy extends PassportStrategy(Strategy) {
         where: {
           id: payload.id,
           email: payload.email,
-          deletedAt: null
-        }
-      })
-      return user; 
+          deletedAt: null,
+        },
+      });
+      return user;
     } catch (error) {
-      console.error(error)
+      console.error(error);
       throw new UnauthorizedException();
     }
   }

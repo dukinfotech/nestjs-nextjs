@@ -4,20 +4,26 @@ import { AuthJwtStrategy } from './jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthJwtResolver } from './jwt.resolver';
+import { EnvService } from 'src/config/enviroments/env.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({
-      secret: process.env.NEXTAUTH_SECRET, // Same token & algorithm as frontend
-      signOptions: {
-        expiresIn: Number(process.env.NEXTAUTH_JWT_EXPIRE) || 60 * 60 * 24 * 30, // Default 30 days
-        algorithm: 'HS256',
-      },
+    JwtModule.registerAsync({
+      inject: [EnvService],
+      useFactory: (envService: EnvService) => {
+        return {
+          secret: envService.appSecret,
+          signOptions: {
+            expiresIn: envService.appAccessTokenExpireIn,
+            algorithm: 'HS256',
+          },
+        }
+      }
     }),
   ],
-
+  
   providers: [AuthJwtResolver, AuthJwtStrategy],
   exports: [AuthJwtStrategy, PassportModule],
 })

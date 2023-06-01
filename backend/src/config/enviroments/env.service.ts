@@ -19,11 +19,27 @@ export class EnvService {
     return this.configService.get<string>('APP_ENV');
   }
 
+  get appSecret(): string {
+    return this.configService.get<string>('APP_SECRET');
+  }
+
+  get appAccessTokenExpireIn(): number {
+    return this.configService.get<number>('APP_ACCESS_TOKEN_EXPIRE_IN');
+  }
+
+  get appRefreshTokenExpireIn(): number {
+    return this.configService.get<number>('APP_REFRESH_TOKEN_EXPIRE_IN');
+  }
+
+  get graphQLDefinitionPath(): string {
+    return this.configService.get<string>('GRAPHQL_DEFINITION_PATH');
+  }
+
   get GqlModuleOptionsFactory(): GqlModuleOptions {
     const devOptions: any = {
       autoSchemaFile: path.join(
         process.cwd(),
-        process.env.GRAPHQL_DEFINITION_PATH,
+        this.graphQLDefinitionPath
       ),
       sortSchema: true,
       debug: true,

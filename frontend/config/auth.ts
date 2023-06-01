@@ -8,8 +8,8 @@ export const authOptions: NextAuthOptions = {
     error: "/auth/signin",
   },
   jwt: {
-    secret: process.env.NEXTAUTH_SECRET,
-    maxAge: Number(process.env.NEXTAUTH_JWT_EXPIRE) || 60 * 60 * 24 * 30, // Default 30 days
+    secret: process.env.APP_SECRET,
+    maxAge: Number(process.env.APP_ACCESS_TOKEN_EXPIRE_IN)
   },
   providers: [
     // Login with email and password

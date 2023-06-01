@@ -19,6 +19,18 @@ export class EnvValidator {
 
   @IsNotEmpty()
   @IsString()
+  APP_SECRET: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  APP_ACCESS_TOKEN_EXPIRE_IN: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  APP_REFRESH_TOKEN_EXPIRE_IN: number;
+
+  @IsNotEmpty()
+  @IsString()
   GRAPHQL_DEFINITION_PATH: string;
 
   @IsNotEmpty()

@@ -7,6 +7,8 @@ services:
       dockerfile: ./frontend/Dockerfile
       args:
         - APP_ENV=${APP_ENV} # Pass APP_ENV arg to Dockerfile
+        - APP_URL=${APP_URL} # Pass APP_URL arg to Dockerfile
+        - APP_SECRET=${APP_SECRET} # Pass APP_SECRET arg to Dockerfile
     volumes: # Mount src folder in host machine to the container (trick for hot reloading)
       - ./frontend/app:/usr/src/app/app
       - ./frontend/components:/usr/src/app/components
