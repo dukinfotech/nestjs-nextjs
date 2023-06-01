@@ -16,6 +16,7 @@ export const LIST_POSTS = gql(
 async function fetchData() {
   const { loading, error, data } = await apolloClient.query<ListPostsQuery>({
     query: LIST_POSTS,
+    fetchPolicy: "no-cache"
   });
   // TODO: Hiển thị lỗi 500 nếu server component lỗi
   return data;
