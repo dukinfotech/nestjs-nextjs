@@ -11,7 +11,7 @@ import { AuthJwtService } from './jwt.service';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    PassportModule.register({ defaultStrategy: 'jwt' }),
+    PassportModule.register({ defaultStrategy: 'access-token' }),
     JwtModule.registerAsync({
       inject: [EnvService],
       useFactory: (envService: EnvService) => {
