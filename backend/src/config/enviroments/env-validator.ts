@@ -31,10 +31,6 @@ export class EnvValidator {
 
   @IsNotEmpty()
   @IsString()
-  GRAPHQL_DEFINITION_PATH: string;
-
-  @IsNotEmpty()
-  @IsString()
   DB_URL: string;
 }
 

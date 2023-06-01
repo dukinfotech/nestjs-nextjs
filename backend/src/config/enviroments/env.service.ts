@@ -31,15 +31,11 @@ export class EnvService {
     return this.configService.get<number>('APP_REFRESH_TOKEN_EXPIRE_IN');
   }
 
-  get graphQLDefinitionPath(): string {
-    return this.configService.get<string>('GRAPHQL_DEFINITION_PATH');
-  }
-
   get GqlModuleOptionsFactory(): GqlModuleOptions {
     const devOptions: any = {
       autoSchemaFile: path.join(
         process.cwd(),
-        this.graphQLDefinitionPath
+        "generated/graphql/schema.gql" 
       ),
       sortSchema: true,
       debug: true,
