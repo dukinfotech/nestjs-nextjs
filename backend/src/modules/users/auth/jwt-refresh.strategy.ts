@@ -9,9 +9,9 @@ import { EnvService } from 'src/config/enviroments/env.service';
 import { PrismaService } from 'src/config/prisma/prisma.service';
 
 @Injectable()
-export class AuthJwtStrategy extends PassportStrategy(
+export class AuthJwtRefreshStrategy extends PassportStrategy(
   Strategy,
-  'access-token',
+  'refresh-token',
 ) {
   constructor(
     private prismaService: PrismaService,
@@ -25,7 +25,7 @@ export class AuthJwtStrategy extends PassportStrategy(
     });
   }
 
-  // Validate accessToken
+  // Validate refreshToken
   async validate(payload: any): Promise<any> {
     try {
       const user = await this.prismaService.user.findFirstOrThrow({

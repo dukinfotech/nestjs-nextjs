@@ -5,6 +5,8 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthJwtResolver } from './jwt.resolver';
 import { EnvService } from 'src/config/enviroments/env.service';
+import { AuthJwtRefreshStrategy } from './jwt-refresh.strategy';
+import { AuthJwtService } from './jwt.service';
 
 @Module({
   imports: [
@@ -19,12 +21,17 @@ import { EnvService } from 'src/config/enviroments/env.service';
             expiresIn: envService.appAccessTokenExpireIn,
             algorithm: 'HS256',
           },
-        }
-      }
+        };
+      },
     }),
   ],
-  
-  providers: [AuthJwtResolver, AuthJwtStrategy],
-  exports: [AuthJwtStrategy, PassportModule],
+
+  providers: [
+    AuthJwtResolver,
+    AuthJwtService,
+    AuthJwtStrategy,
+    AuthJwtRefreshStrategy,
+  ],
+  exports: [AuthJwtStrategy, AuthJwtRefreshStrategy, PassportModule],
 })
 export class AuthJwtModule {}

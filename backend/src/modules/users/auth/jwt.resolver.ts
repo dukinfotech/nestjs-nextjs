@@ -1,46 +1,87 @@
-import { UnauthorizedException } from '@nestjs/common';
-import { Args, Field, ObjectType, Query, Resolver } from '@nestjs/graphql';
-import { JwtService } from '@nestjs/jwt';
+import { UnauthorizedException, UseGuards } from '@nestjs/common';
+import {
+  Args,
+  Context,
+  Field,
+  Mutation,
+  ObjectType,
+  Query,
+  Resolver,
+} from '@nestjs/graphql';
 import * as bcrypt from 'bcrypt';
 import { User } from 'generated/user/user.model';
 import { PrismaService } from 'src/config/prisma/prisma.service';
+import { AuthJwtGuard, CurrentUser } from './jwt.guard';
+import { AuthJwtService } from './jwt.service';
+import { AuthJwtRefreshGuard } from './jwt-refresh.guard';
 
 @ObjectType()
 export class SignInResponse extends User {
-  @Field(() => String, {nullable:false})
+  @Field(() => String, { nullable: false })
   accessToken!: string;
+
+  @Field(() => String, { nullable: false })
+  refreshToken!: string;
+}
+@ObjectType()
+export class RefreshTokenResponse {
+  @Field(() => String, { nullable: false })
+  accessToken!: string;
+
+  @Field(() => String, { nullable: false })
+  refreshToken!: string;
 }
 
 @Resolver(() => User)
 export class AuthJwtResolver {
   constructor(
     private prismaService: PrismaService,
-    private jwtService: JwtService,
+    private authJwtService: AuthJwtService,
   ) {}
 
-  @Query(() => SignInResponse, { name: 'signIn' })
+  @Mutation(() => SignInResponse, { name: 'signIn' })
   async signIn(
     @Args('email', { type: () => String }) email: string,
     @Args('password', { type: () => String }) password: string,
   ) {
-    const user = await this.prismaService.user.findUnique({
-      where: { email },
-    });
-
-    if (!user.deletedAt) {
-      const isMatch = bcrypt.compareSync(password, user.password);
+    try {
+      const user = await this.prismaService.user.findFirstOrThrow({
+        where: { email, deletedAt: null },
+      });
+      const isMatch = bcrypt.compareSync(password, user.hashedPassword);
 
       if (isMatch) {
-        const { password, ...userWithOutPassword } = user;
-        const payload = { id: user.id, email: user.email };
-
+        const { hashedPassword, ...userWithOutPassword } = user;
+        const tokens = await this.authJwtService.getTokens(user);
+        this.authJwtService.updateHashedRefreshToken(user, tokens.refreshToken);
         return {
           ...userWithOutPassword,
-          accessToken: this.jwtService.sign(payload)
+          ...tokens,
         };
       }
+    } catch (error) {
+      console.error(error);
+      throw new UnauthorizedException();
     }
+  }
 
-    throw new UnauthorizedException();
+  @Query(() => RefreshTokenResponse, { name: 'refreshToken' })
+  @UseGuards(AuthJwtRefreshGuard)
+  async refreshToken(@CurrentUser() user: User, @Context() context) {
+    const bearerToken = context.req.headers.authorization;
+    const refreshToken = bearerToken.replace('Bearer', '').trim();
+    const isMatch = bcrypt.compareSync(refreshToken, user.hashedRefreshToken);
+
+    if (isMatch) {
+      const tokens = await this.authJwtService.getTokens(user);
+      this.authJwtService.updateHashedRefreshToken(user, tokens.refreshToken);
+      return tokens;
+    }
+  }
+
+  @Mutation(() => Boolean, { name: 'signOut' })
+  @UseGuards(AuthJwtGuard)
+  async signOut(@CurrentUser() user: User) {
+    return this.authJwtService.signOut(user);
   }
 }
