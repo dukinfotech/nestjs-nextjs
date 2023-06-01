@@ -4,7 +4,8 @@ import { useLazyQuery } from "@apollo/client";
 import { useEffect } from "react";
 import { LIST_POSTS } from "./ServerComponent";
 import { Button } from "@nextui-org/react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import SignOutButton from "./shared-components/SignOutButton";
 
 export default function ClientComponent() {
   const [queryListPosts, { called, loading, data }] = useLazyQuery(LIST_POSTS);
@@ -29,7 +30,7 @@ export default function ClientComponent() {
       {!isAuthenticated ? (
         <Button onPress={() => signIn()}>Sign In</Button>
       ) : (
-        <Button onPress={() => signOut()}>Sign Out</Button>
+        <SignOutButton />
       )}
     </>
   );
