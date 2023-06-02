@@ -1,3 +1,5 @@
+"use client";
+
 import { gql } from "@/generated";
 import { useMutation } from "@apollo/client";
 import { Button } from "@nextui-org/react";

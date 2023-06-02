@@ -24,7 +24,7 @@ export class SignInResponse extends User {
   refreshToken!: string;
 }
 @ObjectType()
-export class RefreshTokenResponse {
+export class TokensResponse {
   @Field(() => String, { nullable: false })
   accessToken!: string;
 
@@ -65,9 +65,9 @@ export class AuthJwtResolver {
     }
   }
 
-  @Query(() => RefreshTokenResponse, { name: 'refreshToken' })
+  @Query(() => TokensResponse, { name: 'refreshTokens' })
   @UseGuards(AuthJwtRefreshGuard)
-  async refreshToken(@CurrentUser() user: User, @Context() context) {
+  async refreshTokens(@CurrentUser() user: User, @Context() context) {
     const bearerToken = context.req.headers.authorization;
     const refreshToken = bearerToken.replace('Bearer', '').trim();
     const isMatch = bcrypt.compareSync(refreshToken, user.hashedRefreshToken);

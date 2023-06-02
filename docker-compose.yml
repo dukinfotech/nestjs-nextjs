@@ -16,6 +16,7 @@ services:
       - ./frontend/config:/usr/src/app/config
       - ./frontend/generated:/usr/src/app/generated
       - ./frontend/public:/usr/src/app/public
+      - ./frontend/hooks:/usr/src/app/hooks
       - ./frontend/middleware.ts:/usr/src/app/middleware.ts
       - .env:/usr/src/.env
     command: [sh, -c, "npm run start:${APP_ENV}"]

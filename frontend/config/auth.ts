@@ -28,7 +28,10 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     // Attach more data to JWT from the return of the authorize method
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
+      if (trigger === 'update') { // Update token when updating session
+        token = { ...token, ...session };
+      }
       const signInUser = user as SignInResponse;
       if (signInUser) {
         token = { ...token, ...signInUser };
