@@ -1,0 +1,15 @@
+
+OK 1. Cần fix khi logout client thì xóa cả session backend
+OK 2. Kiểm tra bằng trường hợp jwt frontend chưa hết hạn mà backend hết hạn thì trả về lỗi như thế nào, cần console log ở validate()
+3. Fix TODO comments
+4. Prisma midleware soft delete
+=> Filter softdelete cần kiểm tra reference table đã xoá hay ko. Ví dụ khi query post thì cần filter post và category chưa xoá
+5. Làm thế nào để xóa cache trong apollo
+6. Có thể sử dụng next13 API thay cho nginx được ko?
+7. Refactor lại .env file (có thể hard code DB URL cho các toool generate) hoặc copy thủ công bằng tay vào backend, frontend...
+8. Đăng nhập bằng facebook, google
+9. Interceptor RefreshToken
+10. Interceptor 401 để redirect đăng nhập
+11. Middleware NextAuth admin
+12. Refactor lại docker-compose
+13. Tạo tài liệu README về công nghệ, chức năng, cài đặt docker-compose

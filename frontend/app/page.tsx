@@ -4,7 +4,7 @@ import ServerComponent from "../components/ServerComponent";
 export default function Home() {
   return (
     <main>
-      <ClientComponent />
+      {/* <ClientComponent /> */}
       {/* @ts-expect-error Server Component */}
       <ServerComponent />
     </main>

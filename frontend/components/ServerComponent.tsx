@@ -1,6 +1,8 @@
 import { ListPostsQuery } from "@/generated/graphql";
-import { apolloClient } from "../config/apollo";
 import { gql } from "@/generated";
+import { getServerSession } from "next-auth";
+import { getApolloClient } from "@/config/apollo";
+import { SessionContextValue } from "next-auth/react";
 
 export const LIST_POSTS = gql(
   `
@@ -14,6 +16,7 @@ export const LIST_POSTS = gql(
 );
 
 async function fetchData() {
+  const apolloClient = await getApolloClient();
   const { loading, error, data } = await apolloClient.query<ListPostsQuery>({
     query: LIST_POSTS,
     fetchPolicy: "no-cache"
