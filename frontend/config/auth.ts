@@ -9,7 +9,7 @@ export const authOptions: NextAuthOptions = {
   },
   jwt: {
     secret: process.env.APP_SECRET,
-    maxAge: Number(process.env.APP_ACCESS_TOKEN_EXPIRE_IN)
+    maxAge: Number(process.env.APP_REFRESH_TOKEN_EXPIRE_IN)
   },
   providers: [
     // Login with email and password

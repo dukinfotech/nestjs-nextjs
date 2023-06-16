@@ -1,23 +1,25 @@
-import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, from } from "@apollo/client";
+import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, Observable, from } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { Singleton } from "./singleton";
-import { Session, getServerSession } from "next-auth";
+import { Session } from "next-auth";
 import { authOptions } from "./auth";
 import { SessionContextValue, signIn, signOut } from "next-auth/react";
 import { REFRESH_TOKENS } from "@/providers/apollo_provider";
 import { RefreshTokensQuery } from "@/generated/graphql";
 import { onError } from "@apollo/client/link/error";
+import { print } from 'graphql';
+import { getServerSession } from "./next-auth";
+import { redirect } from "next/navigation";
 
-enum TokenType {
-  accessToken = "accessToken",
-  refreshToken = "refreshToken",
+export enum TokenType {
+  accessToken,
+  refreshToken
 }
 
 const getApolloClient = async () => {
   const errorLink = await initializeErrorLink();
-  const httpLink = initializeHttpLink();
   const authLink = await initializeAuthLink(TokenType.accessToken);
-
+  const httpLink = initializeHttpLink();
   const apolloClient = initializeApolloClient([errorLink, authLink, httpLink]);
   return apolloClient;
 };
@@ -31,22 +33,17 @@ const initializeHttpLink = () => {
 
 const initializeErrorLink = async () => {
   const session = await getServerSession();
-  return onError(({ graphQLErrors, networkError }) => {
-    if (networkError && process.env.NODE_ENV === "development") {
-    }
+  return onError(({ graphQLErrors, networkError, operation, forward }) => {
+    if (networkError) console.error(`[Network error]: ${networkError}`);
     if (graphQLErrors) {
-      graphQLErrors.forEach(
-        async ({ message, locations, path, extensions }) => {
-          if (process.env.NODE_ENV === "development") {
-            console.info(
-              `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-            );
-          }
-          if (session) {
-            await interceptErrors(session, path, extensions);
-          }
+      graphQLErrors.forEach(({ message, locations, path, extensions }) => {
+        console.error(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`);
+        if (session) {
+          interceptErrors(session, path, extensions).then(() => {
+            forward(operation)
+          })
         }
-      );
+      });
     }
   });
 };
@@ -82,22 +79,28 @@ const interceptErrors = async (
   if (extensions.originalError.statusCode === 401) {
     if (path.includes("refreshToken")) {
       // refreshToken was expired
+      // TODO redirect LOGIN
       signIn();
     } else if (session.user.refreshToken) {
-      // Issue new set of accessToken and refreshToken
-      const httpLink = initializeHttpLink();
-      const authLink = await initializeAuthLink(TokenType.refreshToken);
-      const apolloClient = initializeApolloClient([authLink, httpLink]);
-
       try {
-        const result = await apolloClient.query<RefreshTokensQuery>({
-          query: REFRESH_TOKENS,
-          fetchPolicy: "no-cache",
+        const result = await fetch(`${process.env.APP_HOST}/api/graphql`, {
+          method: 'POST',
+          headers: {
+            accept: '*/*',
+            'content-type': 'application/json',
+            authorization: `Bearer ${session.user.refreshToken}`,
+          },
+          body: JSON.stringify({
+            query: REFRESH_TOKENS,
+            operationName: 'RefreshTokens',
+          })  
         });
-        console.log('=======================', result)
-        session.user = { ...session.user, ...result.data };
+        console.log('222', result.status) // TODO check why return 400?
+        // TODO update session
       } catch (error) {
-        console.log(error);
+        console.log(`Bearer ${session.user.refreshToken}`)
+        console.error(error);
+        // TODO signOut
         signOut();
       }
     }
